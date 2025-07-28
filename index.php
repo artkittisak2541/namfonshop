@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require 'db.php';
 
@@ -14,26 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
   $remember = isset($_POST['remember']);
 
-  $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-  $stmt->bind_param("s", $username);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $user = $result->fetch_assoc();
+  // ✅ PostgreSQL: ป้องกัน SQL Injection ด้วย pg_query_params
+  $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
 
-  if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['user'] = $user;
-    if ($remember) {
-      setcookie("remember_user", $username, time() + (86400 * 30), "/");
+  if ($result && pg_num_rows($result) > 0) {
+    $user = pg_fetch_assoc($result);
+    if (password_verify($password, $user['password'])) {
+      $_SESSION['user'] = $user;
+      if ($remember) {
+        setcookie("remember_user", $username, time() + (86400 * 30), "/");
+      } else {
+        setcookie("remember_user", "", time() - 3600, "/");
+      }
+      header("Location: shop.php");
+      exit();
     } else {
-      setcookie("remember_user", "", time() - 3600, "/");
+      $error = "❌ รหัสผ่านไม่ถูกต้อง";
     }
-    header("Location: shop.php");
-    exit();
   } else {
-    $error = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+    $error = "❌ ไม่พบผู้ใช้นี้";
   }
 }
 ?>
+
 
 <!-- HTML and CSS content omitted for brevity (included in next cell in full version) -->
 

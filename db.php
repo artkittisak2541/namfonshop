@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-  // 👉 ใช้งานบนเครื่องเรา (XAMPP)
+  // ✅ ใช้งานบนเครื่องเรา (XAMPP)
   $host = "localhost";
   $user = "root";
   $pass = "";
@@ -13,14 +13,13 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 
   $conn->set_charset("utf8mb4");
 } else {
-  // 👉 ใช้งานบน Render (PostgreSQL)
-  $host = "dpg-d23o6nadbo4c7383o6qg-a";
+  // ✅ ใช้งานบน Render (PostgreSQL)
+  $host = "dpg-d23o6hnadbo4c7383o6g-a"; // ← ปรับตามของคุณ
   $dbname = "namfonshop_db";
   $user = "namfonshop_db_user";
   $pass = "gObGj49w4TEsZlZzGhNLzzXhQWKJH8eC";
   $port = "5432";
 
-  // 🔌 เชื่อมต่อ PostgreSQL
   $conn = pg_connect("host=$host dbname=$dbname user=$user password=$pass port=$port");
 
   if (!$conn) {

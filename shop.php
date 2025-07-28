@@ -8,16 +8,20 @@ if (!isset($_SESSION['user'])) {
 }
 
 $search = $_GET['search'] ?? '';
+
 if ($search) {
-  $stmt = $conn->prepare("SELECT * FROM products WHERE name LIKE ?");
-  $like = "%$search%";
-  $stmt->bind_param("s", $like);
-  $stmt->execute();
-  $result = $stmt->get_result();
+  $like = '%' . $search . '%';
+  $result = pg_query_params($conn, "SELECT * FROM products WHERE name ILIKE $1", [$like]);
 } else {
-  $result = $conn->query("SELECT * FROM products");
+  $result = pg_query($conn, "SELECT * FROM products");
+}
+
+// ตรวจสอบการดึงข้อมูลล้มเหลว
+if (!$result) {
+  die("❌ Error querying products: " . pg_last_error($conn));
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -151,7 +155,7 @@ if ($search) {
   </form>
 
   <div class="row">
-    <?php while ($row = $result->fetch_assoc()): ?>
+    <?php while ($row = pg_fetch_assoc($result)): ?>
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
       <div class="product animate__animated animate__zoomIn">
         <?php if ($row['tag']): ?>
