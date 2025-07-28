@@ -1,0 +1,498 @@
+/* ✔️ CSS Style ครบระบบ สำหรับหน้าล็อกอิน พร้อม Snow Effect */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Kanit', sans-serif;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* 🔥 Background slideshow */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -2;
+  background-size: cover;
+  background-position: center;
+  animation: slideshow 24s infinite;
+  filter: brightness(0.9);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  background: linear-gradient(to bottom right, #fce4ecaa, #f8bbd0aa, #f3e5f5aa);
+}
+
+@keyframes slideshow {
+  0%   { background-image: url('images/bg1.jpg'); }
+  33%  { background-image: url('images/bg2.jpg'); }
+  66%  { background-image: url('images/bg3.jpg'); }
+  100% { background-image: url('images/bg1.jpg'); }
+}
+
+/* 🔲 Glass Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  max-width: 500px;
+  margin: 100px auto;
+  text-align: center;
+  animation: fadeIn 1.8s ease;
+  color: #333;
+  transition: transform 0.6s ease;
+}
+.glass-card:hover {
+  transform: rotateX(6deg) rotateY(-6deg);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 🔘 ปุ่ม */
+.btn-pink, .btn-primary {
+  background-color: #f48fb1;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-pink:hover {
+  background-color: #ec407a;
+  transform: scale(1.05);
+}
+
+.btn-outline-secondary {
+  border: 1px solid #aaa;
+  background-color: rgba(255,255,255,0.5);
+}
+
+/* ✨ Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 50px;
+  border-radius: 0 0 30px 30px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(270deg, #ffe4f1, #f3e5f5, #d1c4e9, #ffe0f0);
+  background-size: 800% 800%;
+  animation: gradientFlow 15s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+header h1.animated-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #ec407a, #8e24aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+  background-size: 200% auto;
+}
+
+@keyframes shimmer {
+  0% { background-position: -100%; }
+  100% { background-position: 200%; }
+}
+
+nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 16px;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #e52e71;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+nav a:hover {
+  color: #e52e71;
+}
+nav a:hover::after {
+  width: 100%;
+}
+
+/* 🖼️ รูปภาพแอนิเมชัน */
+.shadow-rounded-img, .shadow-rounded-img2 {
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.shadow-rounded-img:hover, .shadow-rounded-img2:hover {
+  transform: scale(1.07);
+}
+
+.shadow-rounded-img {
+  width: 150px;
+  height: 200px;
+}
+
+.shadow-rounded-img2 {
+  width: 150px;
+  height: 300px;
+}
+
+/* 🌊 Animation */
+@keyframes waveFloat {
+  0%   { transform: translateY(0) rotate(0deg); }
+  25%  { transform: translateY(-6px) rotate(-0.7deg); }
+  50%  { transform: translateY(0px) rotate(0.7deg); }
+  75%  { transform: translateY(6px) rotate(-0.5deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.wave-animation {
+  animation: waveFloat 6s ease-in-out infinite;
+}
+
+.wave-float {
+  animation: waveFloat 7s ease-in-out infinite;
+}
+
+/* 🐱 แมวลอย */
+.floating-image-container {
+  position: absolute;
+  top: 430px;
+  right: 10px;
+  z-index: 998;
+}
+
+/* ✨ Overlay ระยิบระยับ */
+.sparkle-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.4) 2px, transparent 3px),
+    radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 2px);
+  background-size: 100px 100px, 150px 150px;
+  animation: sparkleMove 30s linear infinite;
+}
+
+@keyframes sparkleMove {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 1000px 1000px, 800px 800px; }
+}
+
+/* 👁️ Password toggle */
+.input-group .btn {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* ✨ Glow โลโก้ */
+.logo {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 140px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { filter: drop-shadow(0 0 3px #ffb6c1); }
+  to   { filter: drop-shadow(0 0 8px #ff69b4); }
+}
+
+/* 📦 Modal */
+.login-modal-content {
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25),
+              0 0 25px rgba(255, 105, 180, 0.4),
+              0 0 40px rgba(255, 182, 193, 0.3);
+  background: linear-gradient(to right, #d7e2c1ff, #dadfb2ff);
+  color: #333;
+  border: 2px solid rgba(255, 192, 203, 0.6);
+}
+
+.modal-body .form-control {
+  border-radius: 12px;
+}
+
+.modal-header {
+  background: #ffffff80;
+  border-bottom: none;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* 📄 Footer */
+footer {
+  background-color: transparent;
+  color: black;
+  text-align: center;
+  padding: 30px 20px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.image-center-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.product-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  max-width: 1200px;
+}
+
+.product-img {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: floatImage 6s ease-in-out infinite;
+  position: relative;
+  background-color: #ffb6c1;
+}
+
+.product-img:hover {
+  transform: scale(1.12) rotate(-1deg);
+  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+}
+
+@keyframes floatImage {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+/* ป้ายแสดงบนมุมรูป เช่น “ใหม่”, “ลดราคา” */
+.badge-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(to right, #ff4081, #f06292);
+  color: rgb(255, 255, 255);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 9;
+}
+
+/* ❄️ Snowfall Effect */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: white;
+  font-size: 1.2em;
+  user-select: none;
+  z-index: 9999;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0.8;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0.3;
+  }
+}
+/* รองรับขนาดหน้าจอเล็ก */
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0 auto;
+    width: 95%;
+  }
+
+  .login-modal-content {
+    padding: 20px;
+    font-size: 15px;
+  }
+
+  .modal-body .form-control {
+    font-size: 15px;
+  }
+
+  .modal-title {
+    font-size: 18px;
+  }
+
+  .product-img {
+    width: 45%;
+    margin-bottom: 16px;
+  }
+
+  .image-center-container {
+    padding: 20px 10px;
+  }
+
+  nav a {
+    font-size: 14px;
+    margin: 0 8px;
+  }
+
+  header {
+    flex-direction: column;
+    padding: 15px 10px;
+    text-align: center;
+  }
+
+  .btn {
+    font-size: 15px;
+    padding: 8px 16px;
+  }
+
+  .btn-outline-secondary,
+  .btn-primary {
+    width: 100%;
+  }
+}
+.product-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.product-img {
+  width: 140px;
+  max-width: 45vw;
+}
+/* 🎯 Responsive Header */
+.responsive-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(to right, #fce4ec, #f3e5f5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 999;
+}
+
+.responsive-header .brand-title {
+  flex: 1 1 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.responsive-header .main-nav {
+  flex:
+}
+<style>
+/* ... CSS เดิม ... */
+
+/* 🎯 เพิ่มต่อท้าย style เดิม */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  animation: slideshow 24s infinite;
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(to bottom right, #fce4ecaa, #f3e5f5aa, #f8bbd0aa);
+  z-index: -1;
+}
+@keyframes slideshow {
+  0%   { background-image: url('images/bg1.jpg'); }
+  33%  { background-image: url('images/bg2.jpg'); }
+  66%  { background-image: url('images/bg3.jpg'); }
+  100% { background-image: url('images/bg1.jpg'); }
+}
+
+/* ❄️ Snowflake */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: white;
+  font-size: 1.2em;
+  user-select: none;
+  z-index: 9999;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0.8;
+}
+@keyframes fall {
+  0%   { transform: translateY(0);   opacity: 0.8; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
+}
+
+/* ✨ Sparkle */
+.sparkle-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.4) 2px, transparent 3px),
+    radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 2px);
+  background-size: 100px 100px, 150px 150px;
+  animation: sparkleMove 30s linear infinite;
+}
+@keyframes sparkleMove {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 1000px 1000px, 800px 800px; }
+}
+
+/* 🌊 Wave image animation */
+.product img {
+  animation: floatImg 5s ease-in-out infinite;
+}
+@keyframes floatImg {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+</style>
