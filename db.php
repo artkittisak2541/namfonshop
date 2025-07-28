@@ -14,7 +14,6 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 }
 
 $conn = new mysqli($host, $user, $pass, $dbname);
-$conn = new mysqli("localhost", "root", "", "ชื่อฐานข้อมูลใน phpMyAdmin");
 
 // ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
