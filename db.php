@@ -13,7 +13,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   }
 
   $conn->set_charset("utf8mb4");
-  define('DB_TYPE', 'mysql'); // ✅ ต้องมีตรงนี้ด้วย
+  if (!defined('DB_TYPE')) define('DB_TYPE', 'mysql');
 
 } else {
   // 👉 ใช้งานบน Render - PostgreSQL
@@ -30,6 +30,6 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   }
 
   pg_query($conn, "SET client_encoding TO 'UTF8'");
-  define('DB_TYPE', 'pgsql'); // ✅ เพิ่มบรรทัดนี้
+  if (!defined('DB_TYPE')) define('DB_TYPE', 'pgsql');
 }
 ?>
