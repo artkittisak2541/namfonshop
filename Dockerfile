@@ -1,15 +1,10 @@
 FROM php:8.2-apache
 
-# ✅ อัปเดตและติดตั้ง libpq-dev สำหรับ PostgreSQL
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    zip \
-    unzip \
-    && docker-php-ext-install mysqli pdo_pgsql pgsql \
-    && a2enmod rewrite
+# ✅ ติดตั้ง mysqli และ pgsql สำหรับ PHP
+RUN docker-php-ext-install mysqli pdo_pgsql pgsql && a2enmod rewrite
 
 # ✅ ตั้ง DirectoryIndex ให้ Apache รู้จัก index.php
-RUN echo "<IfModule dir_module>\n    DirectoryIndex index.php index.html\n</IfModule>" > /etc/apache2/mods-enabled/dir.conf
+RUN echo "DirectoryIndex index.php" > /etc/apache2/conf-enabled/directoryindex.conf
 
 # ✅ คัดลอกไฟล์ทั้งหมดเข้า Apache root
 COPY . /var/www/html/
