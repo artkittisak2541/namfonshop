@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# ✅ อัปเดตและติดตั้ง dependencies สำหรับ pgsql
+# ✅ อัปเดตและติดตั้ง libpq-dev สำหรับ PostgreSQL
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
