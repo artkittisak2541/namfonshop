@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS shop_db;
+ผCREATE DATABASE IF NOT EXISTS shop_db;
 USE shop_db;
 
 CREATE TABLE users (
@@ -32,24 +32,5 @@ CREATE TABLE order_items (
   product_id INT,
   qty INT,
   price INT
-);
-CREATE TABLE IF NOT EXISTS users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  password TEXT NOT NULL,
-  fullname VARCHAR(100),
-  address TEXT,
-  phone VARCHAR(20),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- เพิ่มบัญชีแอดมิน (user: admin / pass: 123456)
-INSERT INTO users (username, password, fullname, address, phone)
-VALUES (
-  'admin',
-  '$2y$10$QXQFsj9IlVke5cZhdDbMze7eEwjGVC3rK0W/3rSMg/R1HAsNaUGNa',
-  'แอดมิน',
-  'กรุงเทพฯ',
-  '0812345678'
 );
 
