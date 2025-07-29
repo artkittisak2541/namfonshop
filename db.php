@@ -16,11 +16,11 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 
 } else {
   // ✅ เชื่อมต่อ PostgreSQL (Render)
-  $host     = getenv("PGHOST"); 
-  $dbname   = getenv("PGDATABASE"); 
-  $user     = getenv("PGUSER"); 
-  $pass     = getenv("PGPASSWORD");
-  $port     = getenv("PGPORT");
+  $host   = getenv("PGHOST") ?: "dpg-d23o6nadbo4c7383o6qg-a"; // fallback
+  $dbname = getenv("PGDATABASE") ?: "namfonshop_db";
+  $user   = getenv("PGUSER") ?: "namfonshop_db_user";
+  $pass   = getenv("PGPASSWORD") ?: "gObGj49w4TEsZlZzGhNLzzXhQWKJH8eC";
+  $port   = getenv("PGPORT") ?: "5432";
 
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
   if (!$conn) {
