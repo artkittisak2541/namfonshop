@@ -16,11 +16,11 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 
 } else {
   // ✅ เชื่อมต่อ PostgreSQL (Render)
-  $host     = getenv("PGHOST") 
-  $dbname   = getenv("PGDATABASE") 
-  $user     = getenv("PGUSER") 
-  $pass     = getenv("PGPASSWORD")
-  $port     = getenv("PGPORT")
+  $host     = getenv("PGHOST"); 
+  $dbname   = getenv("PGDATABASE"); 
+  $user     = getenv("PGUSER"); 
+  $pass     = getenv("PGPASSWORD");
+  $port     = getenv("PGPORT");
 
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
   if (!$conn) {
