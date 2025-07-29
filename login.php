@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require 'db.php';
 
@@ -14,29 +13,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
   $remember = isset($_POST['remember']);
 
-  // ✅ แก้ตรงนี้: ใช้ pg_query_params
-  $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
-
-  if ($result && pg_num_rows($result) > 0) {
+  if (DB_TYPE === 'mysql') {
+    // ✅ MySQL
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+  } else {
+    // ✅ PostgreSQL
+    $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
     $user = pg_fetch_assoc($result);
+  }
 
+  if ($user) {
     if (password_verify($password, $user['password'])) {
       $_SESSION['user'] = $user;
+
       if ($remember) {
         setcookie("remember_user", $username, time() + (86400 * 30), "/");
       } else {
         setcookie("remember_user", "", time() - 3600, "/");
       }
+
       header("Location: shop.php");
       exit();
     } else {
       $error = "❌ รหัสผ่านไม่ถูกต้อง";
     }
   } else {
-    $error = "❌ ไม่พบชื่อผู้ใช้นี้";
+    $error = "❌ ไม่พบผู้ใช้นี้";
   }
 }
-
 ?>
 
 <!-- HTML and CSS content omitted for brevity (included in next cell in full version) -->
@@ -579,7 +587,6 @@ body::after {
   transition: background 2s ease;
 }
 
-
 </style>
 
 <header class="responsive-header d-flex justify-content-between align-items-center flex-wrap px-4 py-3">
@@ -649,12 +656,12 @@ body::after {
 
 <div class="image-center-container">
   <div class="product-row">
-<img src="images/5.png" alt="สินค้า1" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/5.png" />
-<img src="images/6.png" alt="สินค้า2" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/6.png" />
-<img src="images/7.png" alt="สินค้า3" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/7.png" />
-<img src="images/8.png" alt="สินค้า1" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/8.png" />
-<img src="images/9.png" alt="สินค้า2" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/9.png" />
-<img src="images/10.png" alt="สินค้า3" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/10.png" />
+<img src="images/11.jpg" alt="สินค้า1" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/11.jpg" />
+<img src="images/12.jpg" alt="สินค้า2" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/12.jpg" />
+<img src="images/13.jpg" alt="สินค้า3" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/13.jpg" />
+<img src="images/14.jpg" alt="สินค้า1" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/14.jpg" />
+<img src="images/16.jpg" alt="สินค้า2" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/16.jpg" />
+<img src="images/17.jpg" alt="สินค้า3" class="product-img wave-animation-image" data-bs-toggle="modal" data-bs-target="#productModal" data-img="images/17.jpg" />
 
   </div>
 </div>

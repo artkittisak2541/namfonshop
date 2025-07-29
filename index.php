@@ -13,18 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
   $remember = isset($_POST['remember']);
 
-  // ✅ PostgreSQL: ป้องกัน SQL Injection ด้วย pg_query_params
-  $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
-
-  if ($result && pg_num_rows($result) > 0) {
+  if (DB_TYPE === 'mysql') {
+    // ✅ MySQL
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+  } else {
+    // ✅ PostgreSQL
+    $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
     $user = pg_fetch_assoc($result);
+  }
+
+  if ($user) {
     if (password_verify($password, $user['password'])) {
       $_SESSION['user'] = $user;
+
       if ($remember) {
         setcookie("remember_user", $username, time() + (86400 * 30), "/");
       } else {
         setcookie("remember_user", "", time() - 3600, "/");
       }
+
       header("Location: shop.php");
       exit();
     } else {
@@ -35,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 ?>
-
 
 <!-- HTML and CSS content omitted for brevity (included in next cell in full version) -->
 

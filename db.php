@@ -1,16 +1,35 @@
 <?php
-// 🔗 เชื่อมต่อ MySQL ด้วย MySQLi
-$host = "localhost";
-$user = "root";
-$pass = ""; // ถ้า XAMPP ยังไม่ได้ตั้งรหัสผ่าน root จะว่าง
-$dbname = "shop_db"; // ✅ ฐานข้อมูลต้องมีอยู่จริง
+if ($_SERVER['HTTP_HOST'] === 'localhost') {
+  // 👉 ใช้งานบนเครื่องเรา (XAMPP) - MySQL
+  $host = "localhost";
+  $user = "root";
+  $pass = "";
+  $dbname = "shop_db";
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+  $conn = new mysqli($host, $user, $pass, $dbname);
 
-// ❌ ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-  die("❌ การเชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
+  if ($conn->connect_error) {
+    die("❌ MySQL Connection failed (localhost): " . $conn->connect_error);
+  }
+
+  $conn->set_charset("utf8mb4");
+  define('DB_TYPE', 'mysql'); // ✅ ต้องมีตรงนี้ด้วย
+
+} else {
+  // 👉 ใช้งานบน Render - PostgreSQL
+  $host = "dpg-d23o6nadbo4c7383o6qg-a";
+  $dbname = "namfonshop_db";
+  $user = "namfonshop_db_user";
+  $pass = "gObGj49w4TEsZlZzGhNLzzXhQWKJH8eC";
+  $port = "5432";
+
+  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
+
+  if (!$conn) {
+    die("❌ PostgreSQL Connection failed (Render): " . pg_last_error());
+  }
+
+  pg_query($conn, "SET client_encoding TO 'UTF8'");
+  define('DB_TYPE', 'pgsql'); // ✅ เพิ่มบรรทัดนี้
 }
-
-$conn->set_charset("utf8mb4"); // ✅ รองรับภาษาไทย
 ?>
