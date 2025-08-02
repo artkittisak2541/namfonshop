@@ -23,12 +23,16 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   }
 
   $conn = pg_connect($database_url);
-
   if (!$conn) {
     die("❌ PostgreSQL Connection failed: " . pg_last_error());
   }
 
   pg_query($conn, "SET client_encoding TO 'UTF8'");
+
+  $result = pg_query($conn, "SELECT current_database()");
+  $dbname = pg_fetch_result($result, 0, 0);
+  echo "📦 Connected to DB: $dbname <br>";
+
   if (!defined('DB_TYPE')) define('DB_TYPE', 'pgsql');
 }
 ?>
