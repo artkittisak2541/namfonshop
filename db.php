@@ -15,8 +15,8 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   if (!defined('DB_TYPE')) define('DB_TYPE', 'mysql');
 
 } else {
-  // ✅ Render (PostgreSQL) - ใช้ค่าจริง
-  $host   = "dpg-d23o6nadbo4c7383o6qg-a"; // เปลี่ยนตามจริงถ้าชื่อไม่ตรง
+  // ✅ Render (PostgreSQL)
+  $host   = "dpg-d23o6nadbo4c7383o6qg-a";
   $port   = "5432";
   $dbname = "namfonshop_db";
   $user   = "namfonshop_db_user";
