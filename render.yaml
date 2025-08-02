@@ -11,4 +11,4 @@ services:
         fromDatabase:
           name: namfonshop_db
           property: connectionString
-    initScript: init_postgresql.sql
+    initScript: init_postgresql_v2.sql
