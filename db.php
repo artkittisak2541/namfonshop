@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-  // ✅ เชื่อมต่อ MySQL (localhost)
+  // ✅ Localhost (MySQL)
   $host = "localhost";
   $user = "root";
   $pass = "";
@@ -15,12 +15,12 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   if (!defined('DB_TYPE')) define('DB_TYPE', 'mysql');
 
 } else {
-  // ✅ เชื่อมต่อ PostgreSQL (Render) แบบฝังค่าตรง
-  $host   = "dpg-d23o6nadbo4c7383o6qg-a";
+  // ✅ Render (PostgreSQL) - ใช้ค่าจริง
+  $host   = "dpg-d23o6nadbo4c7383o6qg-a"; // เปลี่ยนตามจริงถ้าชื่อไม่ตรง
   $port   = "5432";
   $dbname = "namfonshop_db";
   $user   = "namfonshop_db_user";
-  $pass   = "g0bGj49w4TEsZ1ZzGhNLzzXhQWKJH8eC";
+  $pass   = "g0bGj49w4TEsZlZzGhNLzzXhQWKJH8eC";
 
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
 
