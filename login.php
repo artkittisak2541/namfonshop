@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'db.php';
+require 'db.php'; // ✅ ตรงนี้ต้องมาก่อนถึงจะ define DB_TYPE ได้
 
 $error = ''; // กำหนดตัวแปรไว้ก่อน
 
@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'] ?? '';
   $password = $_POST['password'] ?? '';
 
-  if (DB_TYPE === 'mysql') {
+  if (defined('DB_TYPE') && DB_TYPE === 'mysql') {
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -28,13 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if ($user && password_verify($password, $user['password'])) {
     $_SESSION['user'] = $user;
-    header("Location: shop.php"); // ✅ ไปหน้า shop
+    header("Location: shop.php");
     exit();
   } else {
-    $error = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"; // ✅ แสดงเฉพาะตอนผิด
+    $error = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
   }
 }
 ?>
+
 
 
 
