@@ -43,7 +43,6 @@ CREATE TABLE IF NOT EXISTS order_items (
   price INT,
   CONSTRAINT fk_items_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
   CONSTRAINT fk_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
-<<<<<<< HEAD
 );
 
 
