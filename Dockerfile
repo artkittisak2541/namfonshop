@@ -1,18 +1,14 @@
+# Dockerfile
 FROM php:8.2-apache
 
-# ติดตั้ง PostgreSQL + MySQL driver
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    postgresql-client \
-    && docker-php-ext-install pdo_pgsql pgsql mysqli \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# ติดตั้ง PostgreSQL client และ PHP extension
+RUN apt-get update && apt-get install -y libpq-dev git unzip && docker-php-ext-install pdo_pgsql pgsql
 
-# คัดลอกไฟล์ทั้งหมดไปไว้ใน Apache root
+# คัดลอกไฟล์เว็บไซต์
 COPY . /var/www/html/
 
-# ตั้ง working dir
-WORKDIR /var/www/html/
+# ตั้งค่า permission
+RUN chown -R www-data:www-data /var/www/html/
 
-# รัน Apache
-CMD ["apache2-foreground"]
+# ✅ ไม่ต้อง COPY ไป docker-entrypoint-initdb.d เพราะไม่ได้ใช้ PostgreSQL container
+# แนะนำให้ใช้ init.php เรียก SQL แทน
