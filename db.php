@@ -16,7 +16,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 
 } else {
   // ✅ Render (PostgreSQL)
-  $database_url = getenv("DATABASE_URL"); // ดึง DATABASE_URL จาก Render
+  $database_url = getenv("DATABASE_URL");
 
   if (!$database_url) {
     die("❌ DATABASE_URL environment variable is not set.");

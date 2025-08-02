@@ -1,15 +1,12 @@
 <?php
 session_start();
 require 'db.php';
-if (isset($_SESSION['user'])) {
-  header("Location: shop.php");
-  exit();
-}
-$error = '';
+
+$error = ''; // กำหนดตัวแปรไว้ก่อน
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $username = $_POST['username'];
-  $password = $_POST['password'];
-  $remember = isset($_POST['remember']);
+  $username = $_POST['username'] ?? '';
+  $password = $_POST['password'] ?? '';
 
   if (DB_TYPE === 'mysql') {
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
@@ -18,29 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
   } else {
-    $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
+    $query = "SELECT * FROM users WHERE username = $1";
+    $params = [$username];
+    $result = pg_query_params($conn, $query, $params);
+
+    if (!$result) {
+      die("❌ PostgreSQL query failed: " . pg_last_error($conn));
+    }
+
     $user = pg_fetch_assoc($result);
   }
 
   if ($user && password_verify($password, $user['password'])) {
     $_SESSION['user'] = $user;
-    if ($remember) {
-      setcookie("remember_user", $username, time() + (86400 * 30), "/");
-    } else {
-      setcookie("remember_user", "", time() - 3600, "/");
-    }
-    header("Location: shop.php");
+    header("Location: shop.php"); // ✅ ไปหน้า shop
     exit();
   } else {
-    $error = $user ? "❌ รหัสผ่านไม่ถูกต้อง" : "❌ ไม่พบผู้ใช้นี้";
+    $error = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"; // ✅ แสดงเฉพาะตอนผิด
   }
 }
 ?>
 
-<!-- ส่วน HTML+CSS+JS อยู่ใน reply ถัดไป (ยาวเกิน 1 ข้อความ) -->
-
-
-<!-- HTML and CSS content omitted for brevity (included in next cell in full version) -->
 
 
 <!DOCTYPE html>
