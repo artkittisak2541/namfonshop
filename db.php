@@ -31,6 +31,6 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 
   $result = pg_query($conn, "SELECT current_database()");
   $dbname = pg_fetch_result($result, 0, 0);
-<
+
 }
 ?>
