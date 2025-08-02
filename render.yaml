@@ -6,8 +6,6 @@ services:
     repo: https://github.com/artkittisak2541/namfonshop
     branch: main
     dockerfilePath: Dockerfile
-    buildCommand: ""
-    startCommand: ""
     envVars:
       - key: DATABASE_URL
         fromDatabase:
