@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-  // ✅ เชื่อมต่อ MySQL (localhost)
+  // ✅ Localhost (MySQL)
   $host = "localhost";
   $user = "root";
   $pass = "";
@@ -15,12 +15,17 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   if (!defined('DB_TYPE')) define('DB_TYPE', 'mysql');
 
 } else {
-  // ✅ เชื่อมต่อ PostgreSQL (Render)
-  $host   = getenv("PGHOST") ?: "dpg-d23o6nadbo4c7383o6qg-a"; // fallback
-  $dbname = getenv("PGDATABASE") ?: "namfonshop_db";
-  $user   = getenv("PGUSER") ?: "namfonshop_db_user";
-  $pass   = getenv("PGPASSWORD") ?: "gObGj49w4TEsZlZzGhNLzzXhQWKJH8eC";
-  $port   = getenv("PGPORT") ?: "5432";
+  // ✅ Render (PostgreSQL)
+  $host     = getenv("PGHOST");
+  $dbname   = getenv("PGDATABASE");
+  $user     = getenv("PGUSER");
+  $pass     = getenv("PGPASSWORD");
+  $port     = getenv("PGPORT");
+
+  // ตรวจสอบ ENV ให้ครบก่อนเชื่อมต่อ
+  if (!$host || !$dbname || !$user || !$pass) {
+    die("❌ Missing PostgreSQL ENV variables. Please check PGHOST, PGDATABASE, PGUSER, PGPASSWORD.");
+  }
 
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
   if (!$conn) {
