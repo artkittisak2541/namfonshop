@@ -44,3 +44,7 @@ CREATE TABLE IF NOT EXISTS order_items (
   qty INT,
   price INT
 );
+INSERT INTO users (username, password, fullname, address, phone)
+VALUES 
+  ('user2', '$2y$10$QXQFsj9IlVke5cZhdDbMze7eEwjGVC3rK0W/3rSMg/R1HAsNaUGNa', 'นายสมชาย', 'ขอนแก่น', '0834567890'),
+  ('user3', '$2y$10$QXQFsj9IlVke5cZhdDbMze7eEwjGVC3rK0W/3rSMg/R1HAsNaUGNa', 'คุณหญิงศรี', 'ภูเก็ต', '0845678901');
