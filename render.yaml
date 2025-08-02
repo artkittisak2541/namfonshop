@@ -3,12 +3,19 @@ services:
     name: namfonshop
     env: docker
     plan: free
-    repo: https://github.com/artkittisak2541/namfonshop
+    repo: https://github.com/artkittisak2541/namfonshop.git
     branch: main
-    dockerfilePath: Dockerfile
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""
+    startCommand: apache2-foreground
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: namfonshop_db
+          name: namfonshop-db
           property: connectionString
-    initScript: init_postgresql_v2.sql   # << เปลี่ยนตรงนี้
+
+databases:
+  - name: namfonshop-db
+    plan: free
+    databaseName: shop_db
+    user: shop_user
