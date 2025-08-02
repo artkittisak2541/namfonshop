@@ -16,13 +16,13 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 
 } else {
   // ✅ Render (PostgreSQL)
-  $host   = "dpg-d23o6nadbo4c7383o6qg-a";
-  $port   = "5432";
-  $dbname = "namfonshop_db";
-  $user   = "namfonshop_db_user";
-  $pass   = "g0bGj49w4TEsZlZzGhNLzzXhQWKJH8eC";
+  $database_url = getenv("DATABASE_URL"); // ดึง DATABASE_URL จาก Render
 
-  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
+  if (!$database_url) {
+    die("❌ DATABASE_URL environment variable is not set.");
+  }
+
+  $conn = pg_connect($database_url);
 
   if (!$conn) {
     die("❌ PostgreSQL Connection failed: " . pg_last_error());
