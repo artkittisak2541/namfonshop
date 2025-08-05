@@ -11,7 +11,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 } else {
   // ✅ Render - PostgreSQL
   $host = 'dpg-d23o6nadbo4c7383o6qg-a.oregon-postgres.render.com';
-  $port = 5432;
+  $port = '5432';
   $dbname = 'namfonshop_db';
   $user = 'namfonshop_db_user';
   $pass = 'gObGj49w4TEsZlZzGhNLzzXhQWKJH8eC';
