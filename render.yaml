@@ -3,10 +3,10 @@ services:
     name: namfonshop
     env: docker
     plan: free
+    autoDeploy: true
     repo: https://github.com/artkittisak2541/namfonshop.git
     branch: main
     dockerfilePath: ./Dockerfile
-    buildCommand: ""
     startCommand: apache2-foreground
     envVars:
       - key: DATABASE_URL
@@ -17,5 +17,5 @@ services:
 databases:
   - name: namfonshop-db
     plan: free
-    databaseName: shop_db
-    user: shop_user
+    databaseName: namfonshop_db
+    user: namfonshop_db_user
