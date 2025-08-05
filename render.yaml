@@ -13,6 +13,26 @@ services:
         fromDatabase:
           name: namfonshop_db
           property: connectionString
+      - key: PGHOST
+        fromDatabase:
+          name: namfonshop_db
+          property: host
+      - key: PGDATABASE
+        fromDatabase:
+          name: namfonshop_db
+          property: database
+      - key: PGUSER
+        fromDatabase:
+          name: namfonshop_db
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: namfonshop_db
+          property: password
+      - key: PGPORT
+        fromDatabase:
+          name: namfonshop_db
+          property: port
 
 databases:
   - name: namfonshop_db
