@@ -7,10 +7,10 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   }
   $conn->set_charset("utf8mb4");
   define('DB_TYPE', 'mysql');
+
 } else {
   // ✅ PostgreSQL (Render)
   $url = getenv("DATABASE_URL");
-
   if (!$url) {
     die("❌ DATABASE_URL is not set.");
   }
@@ -26,11 +26,11 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   $pass = $db["pass"];
   $dbname = ltrim($db["path"], "/");
 
-  // ✅ เชื่อมต่อด้วย SSL
+  // ✅ เพิ่ม sslmode=require เพื่อให้เชื่อมต่อ Render ได้
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass sslmode=require");
 
   if (!$conn) {
-    die("❌ PostgreSQL Connection failed."); // ไม่ใช้ pg_last_error() เพราะไม่มี conn
+    die("❌ PostgreSQL Connection failed.");
   }
 
   pg_query($conn, "SET client_encoding TO 'UTF8'");
