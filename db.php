@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-  // ✅ Localhost (MySQL)
+  // ✅ เชื่อมต่อ MySQL (Localhost)
   $host = "localhost";
   $user = "root";
   $pass = "";
@@ -15,27 +15,18 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   if (!defined('DB_TYPE')) define('DB_TYPE', 'mysql');
 
 } else {
-  // ✅ Render (PostgreSQL)
-  $database_url = getenv("DATABASE_URL");
+  // ✅ เชื่อมต่อ PostgreSQL (Render)
+  $host     = getenv("PGHOST");
+  $dbname   = getenv("PGDATABASE");
+  $user     = getenv("PGUSER");
+  $pass     = getenv("PGPASSWORD");
+  $port     = getenv("PGPORT");
 
-  if (!$database_url) {
-    die("❌ DATABASE_URL environment variable is not set.");
-  }
-
-  // ✅ แปลง DATABASE_URL เป็นค่าแยก
-  $url = parse_url($database_url);
-  $host = $url["host"];
-  $port = $url["port"];
-  $user = $url["user"];
-  $pass = $url["pass"];
-  $dbname = ltrim($url["path"], "/");
-
-  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
+  $conn = pg_connect("host=$host dbname=$dbname user=$user password=$pass port=$port");
   if (!$conn) {
-    die("❌ PostgreSQL Connection failed: " . pg_last_error());
+    die("❌ PostgreSQL Connection failed.");
   }
 
-  pg_query($conn, "SET client_encoding TO 'UTF8'");
   if (!defined('DB_TYPE')) define('DB_TYPE', 'pgsql');
 }
 ?>
