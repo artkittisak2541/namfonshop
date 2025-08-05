@@ -1,31 +1,30 @@
 <?php
 session_start();
-require 'db.php'; // ✅ ตรงนี้ต้องมาก่อนถึงจะ define DB_TYPE ได้
+require 'db.php'; // ต้องมาก่อนเพื่อ define('DB_TYPE')
 
-$error = ''; // กำหนดตัวแปรไว้ก่อน
+$error = ''; // กำหนดไว้ก่อนเพื่อใช้แสดงข้อผิดพลาด
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'] ?? '';
   $password = $_POST['password'] ?? '';
+  $user = null;
 
   if (defined('DB_TYPE') && DB_TYPE === 'mysql') {
+    // ✅ MySQL
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
-  } else {
-    $query = "SELECT * FROM users WHERE username = $1";
-    $params = [$username];
-    $result = pg_query_params($conn, $query, $params);
-
-    if (!$result) {
-      die("❌ PostgreSQL query failed: " . pg_last_error($conn));
+  } else if (defined('DB_TYPE') && DB_TYPE === 'pgsql') {
+    // ✅ PostgreSQL
+    $result = pg_query_params($conn, "SELECT * FROM users WHERE username = $1", [$username]);
+    if ($result) {
+      $user = pg_fetch_assoc($result);
     }
-
-    $user = pg_fetch_assoc($result);
   }
 
+  // ✅ ตรวจสอบรหัสผ่าน
   if ($user && password_verify($password, $user['password'])) {
     $_SESSION['user'] = $user;
     header("Location: shop.php");
@@ -35,8 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 ?>
-
-
 
 
 <!DOCTYPE html>
