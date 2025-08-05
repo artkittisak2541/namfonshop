@@ -22,15 +22,20 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
     die("❌ DATABASE_URL environment variable is not set.");
   }
 
-  $conn = pg_connect($database_url);
+  // ✅ แปลง DATABASE_URL เป็นค่าแยก
+  $url = parse_url($database_url);
+  $host = $url["host"];
+  $port = $url["port"];
+  $user = $url["user"];
+  $pass = $url["pass"];
+  $dbname = ltrim($url["path"], "/");
+
+  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
   if (!$conn) {
     die("❌ PostgreSQL Connection failed: " . pg_last_error());
   }
 
   pg_query($conn, "SET client_encoding TO 'UTF8'");
-
-  $result = pg_query($conn, "SELECT current_database()");
-  $dbname = pg_fetch_result($result, 0, 0);
-
+  if (!defined('DB_TYPE')) define('DB_TYPE', 'pgsql');
 }
 ?>
