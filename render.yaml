@@ -11,11 +11,11 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: namfonshop-db
+          name: namfonshop_db
           property: connectionString
 
 databases:
-  - name: namfonshop-db
+  - name: namfonshop_db
     plan: free
     databaseName: namfonshop_db
     user: namfonshop_db_user
