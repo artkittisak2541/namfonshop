@@ -1,32 +1,37 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-  // ✅ เชื่อมต่อ MySQL (Localhost)
-  $host = "localhost";
-  $user = "root";
-  $pass = "";
-  $dbname = "shop_db";
-
-  $conn = new mysqli($host, $user, $pass, $dbname);
+  // ✅ MySQL (localhost)
+  $conn = new mysqli("localhost", "root", "", "shop_db");
   if ($conn->connect_error) {
     die("❌ MySQL Connection failed: " . $conn->connect_error);
   }
-
   $conn->set_charset("utf8mb4");
-  if (!defined('DB_TYPE')) define('DB_TYPE', 'mysql');
+  define('DB_TYPE', 'mysql');
 
 } else {
-  // ✅ เชื่อมต่อ PostgreSQL (Render)
-  $host     = getenv("PGHOST");
-  $dbname   = getenv("PGDATABASE");
-  $user     = getenv("PGUSER");
-  $pass     = getenv("PGPASSWORD");
-  $port     = getenv("PGPORT");
-
-  $conn = pg_connect("host=$host dbname=$dbname user=$user password=$pass port=$port");
-  if (!$conn) {
-    die("❌ PostgreSQL Connection failed.");
+  // ✅ PostgreSQL (Render)
+  $url = getenv("DATABASE_URL");
+  if (!$url) {
+    die("❌ DATABASE_URL is not set.");
   }
 
-  if (!defined('DB_TYPE')) define('DB_TYPE', 'pgsql');
+  $db = parse_url($url);
+  if (!$db || !isset($db["host"])) {
+    die("❌ DATABASE_URL is malformed.");
+  }
+
+  $host = $db["host"];
+  $port = $db["port"] ?? 5432;
+  $user = $db["user"];
+  $pass = $db["pass"];
+  $dbname = ltrim($db["path"], "/");
+
+  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
+  if (!$conn) {
+    die("❌ PostgreSQL Connection failed: " . pg_last_error());
+  }
+
+  pg_query($conn, "SET client_encoding TO 'UTF8'");
+  define('DB_TYPE', 'pgsql');
 }
 ?>
