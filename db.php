@@ -2,9 +2,11 @@
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
   // ✅ Localhost - MySQL
   $conn = new mysqli("localhost", "root", "", "shop_db");
+
   if ($conn->connect_error) {
     die("❌ MySQL Connection failed: " . $conn->connect_error);
   }
+
   $conn->set_charset("utf8mb4");
   define('DB_TYPE', 'mysql');
 
