@@ -3,6 +3,7 @@ services:
     name: namfonshop
     env: docker
     plan: free
+    autoDeploy: true
     repo: https://github.com/artkittisak2541/namfonshop.git
     branch: main
     dockerfilePath: ./Dockerfile
