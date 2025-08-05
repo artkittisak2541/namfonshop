@@ -1,37 +1,44 @@
 <?php
 session_start();
-require 'db.php'; // ✅ ตรงนี้ต้องมาก่อนถึงจะ define DB_TYPE ได้
+require 'db.php'; // ต้องมาก่อน เพื่อให้ define('DB_TYPE') ทำงาน
 
-$error = ''; // กำหนดตัวแปรไว้ก่อน
+$error = ''; // เก็บข้อความแสดงข้อผิดพลาด
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $username = $_POST['username'] ?? '';
+  $username = trim($_POST['username'] ?? '');
   $password = $_POST['password'] ?? '';
 
-  if (defined('DB_TYPE') && DB_TYPE === 'mysql') {
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
+  if (!$username || !$password) {
+    $error = "❌ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
   } else {
-    $query = "SELECT * FROM users WHERE username = $1";
-    $params = [$username];
-    $result = pg_query_params($conn, $query, $params);
+    if (defined('DB_TYPE') && DB_TYPE === 'mysql') {
+      // ✅ สำหรับ MySQL
+      $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+      $stmt->bind_param("s", $username);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $user = $result->fetch_assoc();
+      $stmt->close();
+    } else {
+      // ✅ สำหรับ PostgreSQL
+      $query = "SELECT * FROM users WHERE username = $1";
+      $result = pg_query_params($conn, $query, [$username]);
 
-    if (!$result) {
-      die("❌ PostgreSQL query failed: " . pg_last_error($conn));
+      if (!$result) {
+        die("❌ PostgreSQL query failed: " . pg_last_error($conn));
+      }
+
+      $user = pg_fetch_assoc($result);
     }
 
-    $user = pg_fetch_assoc($result);
-  }
-
-  if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['user'] = $user;
-    header("Location: shop.php");
-    exit();
-  } else {
-    $error = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+    // ✅ ตรวจสอบรหัสผ่าน
+    if ($user && password_verify($password, $user['password'])) {
+      $_SESSION['user'] = $user;
+      header("Location: shop.php");
+      exit();
+    } else {
+      $error = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+    }
   }
 }
 ?>
