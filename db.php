@@ -16,7 +16,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   $port = '5432';
   $dbname = 'namfonshop_db';
   $user = 'namfonshop_db_user';
-  $pass = 'g0bGj49w4TEsZlZzGhNLzzXhQWKJH8eC';
+  $pass = 'gObGj49w4TEsZlZzGhNLzzXhQWKJH8eC';
 
   // ✅ เพิ่ม sslmode=require
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass sslmode=require");
