@@ -1,33 +1,58 @@
 <?php
-require 'db.php'; // เชื่อมต่อฐานข้อมูล
+require 'db.php'; // ✅ เชื่อมต่อฐานข้อมูล และกำหนด DB_TYPE
+
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
-  $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT); // ✅ ใช้ตัวแปรนี้
+  $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
   $fullname = $_POST['fullname'];
   $address = $_POST['address'];
   $phone = $_POST['phone'];
 
-  $check = $conn->prepare("SELECT id FROM users WHERE username = ?");
-  $check->bind_param("s", $username);
-  $check->execute();
-  $check->store_result();
+  if (defined('DB_TYPE') && DB_TYPE === 'mysql') {
+    // ✅ กรณีใช้ MySQL (localhost)
+    $check = $conn->prepare("SELECT id FROM users WHERE username = ?");
+    $check->bind_param("s", $username);
+    $check->execute();
+    $check->store_result();
 
-  if ($check->num_rows > 0) {
-    $error = "❌ ชื่อผู้ใช้นี้มีอยู่แล้ว กรุณาใช้ชื่ออื่น";
-  } else {
-    $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, address, phone) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $username, $hashed_password, $fullname, $address, $phone);
-
-    if ($stmt->execute()) {
-      header("Location: login.php?registered=1");
-      exit();
+    if ($check->num_rows > 0) {
+      $error = "❌ ชื่อผู้ใช้นี้มีอยู่แล้ว กรุณาใช้ชื่ออื่น";
     } else {
-      $error = "เกิดข้อผิดพลาด: " . $conn->error;
+      $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, address, phone) VALUES (?, ?, ?, ?, ?)");
+      $stmt->bind_param("sssss", $username, $hashed_password, $fullname, $address, $phone);
+
+      if ($stmt->execute()) {
+        header("Location: login.php?registered=1");
+        exit();
+      } else {
+        $error = "เกิดข้อผิดพลาด: " . $conn->error;
+      }
+      $stmt->close();
     }
-    $stmt->close();
+    $check->close();
+
+  } else {
+    // ✅ กรณีใช้ PostgreSQL (Render)
+    $checkQuery = "SELECT id FROM users WHERE username = $1";
+    $checkResult = pg_query_params($conn, $checkQuery, [$username]);
+
+    if (pg_num_rows($checkResult) > 0) {
+      $error = "❌ ชื่อผู้ใช้นี้มีอยู่แล้ว กรุณาใช้ชื่ออื่น";
+    } else {
+      $insertQuery = "INSERT INTO users (username, password, fullname, address, phone) VALUES ($1, $2, $3, $4, $5)";
+      $params = [$username, $hashed_password, $fullname, $address, $phone];
+      $result = pg_query_params($conn, $insertQuery, $params);
+
+      if ($result) {
+        header("Location: login.php?registered=1");
+        exit();
+      } else {
+        $error = "เกิดข้อผิดพลาด: " . pg_last_error($conn);
+      }
+    }
   }
-  $check->close();
 }
 ?>
 
@@ -62,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="card">
     <h2>📝 สมัครสมาชิก</h2>
 
-    <?php if (isset($error)): ?>
+    <?php if (!empty($error)): ?>
       <div class="alert alert-danger"><?= $error ?></div>
     <?php endif; ?>
 
