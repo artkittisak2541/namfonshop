@@ -26,7 +26,9 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   $pass = $db["pass"];
   $dbname = ltrim($db["path"], "/");
 
-  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass");
+  // ✅ เพิ่ม sslmode=require ตรงนี้
+  $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass sslmode=require");
+
   if (!$conn) {
     die("❌ PostgreSQL Connection failed: " . pg_last_error());
   }
