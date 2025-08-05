@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-  // ✅ MySQL (localhost)
+  // ✅ Localhost - MySQL
   $conn = new mysqli("localhost", "root", "", "shop_db");
   if ($conn->connect_error) {
     die("❌ MySQL Connection failed: " . $conn->connect_error);
@@ -9,28 +9,18 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
   define('DB_TYPE', 'mysql');
 
 } else {
-  // ✅ PostgreSQL (Render)
-  $url = getenv("DATABASE_URL");
-  if (!$url) {
-    die("❌ DATABASE_URL is not set.");
-  }
+  // ✅ Render - PostgreSQL
+  $host = 'dpg-d23o6nadbo4c7383o6qg-a.oregon-postgres.render.com';
+  $port = 5432;
+  $dbname = 'namfonshop_db';
+  $user = 'namfonshop_db_user';
+  $pass = 'g0bGj49w4TEsZ1ZzGhNLzzXhQWKJH8eC';
 
-  $db = parse_url($url);
-  if (!$db || !isset($db["host"])) {
-    die("❌ DATABASE_URL is malformed.");
-  }
-
-  $host = $db["host"];
-  $port = $db["port"] ?? 5432;
-  $user = $db["user"];
-  $pass = $db["pass"];
-  $dbname = ltrim($db["path"], "/");
-
-  // ✅ เพิ่ม sslmode=require เพื่อให้เชื่อมต่อ Render ได้
+  // ✅ เพิ่ม sslmode=require
   $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$pass sslmode=require");
 
   if (!$conn) {
-    die("❌ PostgreSQL Connection failed.");
+    die("❌ PostgreSQL Connection failed: " . pg_last_error());
   }
 
   pg_query($conn, "SET client_encoding TO 'UTF8'");
